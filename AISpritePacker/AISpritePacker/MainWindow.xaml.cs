@@ -22,6 +22,9 @@ namespace AISpritePacker
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		int canvasItemsWidth = 0;
+		int canvasItemsHeight = 0;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -44,6 +47,54 @@ namespace AISpritePacker
 					Canvas_Sprites.Children.Add(cardImage);
 					Canvas_Sprites.Children[0].AllowDrop = true;
 
+				}
+			}
+		}
+
+		private void Canvas_Sprites_Drop(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] filenames = e.Data.GetData(DataFormats.FileDrop) as string[];
+				foreach (string filename in filenames)
+				{
+					//Construct image placeholder / set source
+					Image cardImage = new Image();
+					cardImage.Source = new BitmapImage(new Uri(filename));
+
+					//Add filepath to left listbox
+					//lbx_Left.Items.Add(filename);
+
+					//Set the canvas left to the width of total items
+					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsWidth);
+					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsHeight);
+
+					//add the image width to total item width
+					
+					//canvasItemsHeight += (int)cardImage.Source.Width;
+					if (canvasItemsWidth == 0 && canvasItemsHeight != 0)
+					{
+						Canvas_Sprites.Height = canvasItemsHeight + (int)cardImage.Source.Height;
+					}
+					canvasItemsWidth += (int)cardImage.Source.Width;
+					
+					
+					//
+					if (canvasItemsWidth > 300)
+					{
+						Canvas_Sprites.Width = canvasItemsWidth;
+						canvasItemsWidth = 0;
+						canvasItemsHeight += (int)cardImage.Source.Height;
+					}
+
+					//output total items width to list box
+					//lbx_Bottom.Items.Add(canvasItemsWidth);
+
+					//Set drop event true
+					cardImage.AllowDrop = true;
+
+					//Add the image to the canvas
+					 Canvas_Sprites.Children.Add(cardImage);
 				}
 			}
 		}

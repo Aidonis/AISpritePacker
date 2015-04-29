@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
 	<Grid>
-		<Menu HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="517" Grid.ColumnSpan="2">
+		<Menu Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.ColumnSpan="2">
 			<MenuItem Header="_File	">
 				<MenuItem Header="_New"/>
 				<MenuItem Header="_Open"  Click="MenuItem_Click_Open"/>
@@ -17,6 +17,10 @@
 			<MenuItem Header="_Edit	">
 			</MenuItem>
 		</Menu>
-		<Canvas x:Name="Canvas_Sprites" HorizontalAlignment="Left" Height="285" Margin="163,25,0,0" VerticalAlignment="Top" Width="344" Background="Gray"/>
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="187,25,10,10" Height="auto" Width="auto">
+			<Canvas x:Name="Canvas_Sprites" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Gray" AllowDrop="True" Drop="Canvas_Sprites_Drop"/>
+		</ScrollViewer>
+
 	</Grid>
 </Window>
