@@ -22,8 +22,9 @@ namespace AISpritePacker
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		int canvasItemsWidth = 0;
-		int canvasItemsHeight = 0;
+		int canvasItemsXPos = 0;
+		int canvasItemsYPos = 0;
+		int maxItemsWidth = 512;
 
 		public MainWindow()
 		{
@@ -61,30 +62,33 @@ namespace AISpritePacker
 					//Construct image placeholder / set source
 					Image cardImage = new Image();
 					cardImage.Source = new BitmapImage(new Uri(filename));
+					Canvas_Sprites.Width = maxItemsWidth;
 
-					//Add filepath to left listbox
-					//lbx_Left.Items.Add(filename);
+
+					//if (Canvas_Sprites.Children.Count == 0)
+					//{
+					//	Canvas_Sprites.Width = maxItemsWidth;
+					//}
 
 					//Set the canvas left to the width of total items
-					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsWidth);
-					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsHeight);
+					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsXPos);
+					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsYPos);
 
 					//add the image width to total item width
 					
 					//canvasItemsHeight += (int)cardImage.Source.Width;
-					if (canvasItemsWidth == 0 && canvasItemsHeight != 0)
+					if (canvasItemsXPos == 0 && canvasItemsYPos != 0)
 					{
-						Canvas_Sprites.Height = canvasItemsHeight + (int)cardImage.Source.Height;
+						Canvas_Sprites.Height = canvasItemsYPos + (int)cardImage.Source.Height;
 					}
-					canvasItemsWidth += (int)cardImage.Source.Width;
+					canvasItemsXPos += (int)cardImage.Source.Width;
 					
 					
 					//
-					if (canvasItemsWidth > 300)
-					{
-						Canvas_Sprites.Width = canvasItemsWidth;
-						canvasItemsWidth = 0;
-						canvasItemsHeight += (int)cardImage.Source.Height;
+					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
+					{	
+						canvasItemsXPos = 0;
+						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites);
 					}
 
 					//output total items width to list box
@@ -93,10 +97,77 @@ namespace AISpritePacker
 					//Set drop event true
 					cardImage.AllowDrop = true;
 
+					//Testing GetNextRow
+					
+
 					//Add the image to the canvas
-					 Canvas_Sprites.Children.Add(cardImage);
+					Canvas_Sprites.Children.Add(cardImage);
+					testBox.Items.Add(GetMaxY(Canvas_Sprites));
 				}
 			}
+		}
+
+		//Export image controls
+		private void Button_Click_Export(object sender, RoutedEventArgs e)
+		{
+			RenderTargetBitmap rtb = GetImage(Canvas_Sprites);
+			PngBitmapEncoder png = new PngBitmapEncoder();
+			png.Frames.Add(BitmapFrame.Create(rtb));
+			using (Stream stm = new FileStream("C:/Users/aidan.nabass/Documents/PackerSaves/new.png", FileMode.Create))
+			{
+				png.Save(stm);
+			}
+			
+			
+		}
+
+		//Return view as RenderTargetBitmap
+		public static RenderTargetBitmap GetImage(Canvas view)
+		{
+			Size size = new Size(view.ActualWidth, view.ActualHeight);
+			if (size.IsEmpty)
+			{
+				return null;
+			}
+			RenderTargetBitmap result = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
+
+			DrawingVisual drawingvisual = new DrawingVisual();
+			using (DrawingContext context = drawingvisual.RenderOpen())
+			{
+				context.DrawRectangle(new VisualBrush(view), null, new Rect(new Point(), size));
+				context.Close();
+			}
+			result.Render(drawingvisual);
+			return result;
+		}
+
+		//Get next row height
+		public static double GetMaxY(Canvas view)
+		{
+			double maxY = 0;
+			foreach (Image child in view.Children)
+			{
+				if (child.Source.Height >= maxY)
+				{
+					maxY = Canvas.GetTop(child);
+					maxY += child.Source.Height;
+				}			
+			}
+			return maxY;
+		}
+
+		public static double GetMaxX(Canvas view)
+		{
+			double maxX = 0;
+			foreach (Image child in view.Children)
+			{
+				if (Canvas.GetRight(child) > maxX)
+				{
+					maxX = Canvas.GetRight(child);
+				}
+			}
+
+			return maxX;
 		}
 	}
 }
