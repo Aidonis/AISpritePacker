@@ -25,6 +25,7 @@ namespace AISpritePacker
 		int canvasItemsXPos = 0;
 		int canvasItemsYPos = 0;
 		int maxItemsWidth = 512;
+		double newHeight = 0;
 
 		public MainWindow()
 		{
@@ -52,6 +53,7 @@ namespace AISpritePacker
 			}
 		}
 
+		//Import Image from drag/drop
 		private void Canvas_Sprites_Drop(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -63,42 +65,27 @@ namespace AISpritePacker
 					Image cardImage = new Image();
 					cardImage.Source = new BitmapImage(new Uri(filename));
 					Canvas_Sprites.Width = maxItemsWidth;
-
-
-					//if (Canvas_Sprites.Children.Count == 0)
-					//{
-					//	Canvas_Sprites.Width = maxItemsWidth;
-					//}
+					newHeight = canvasItemsYPos + cardImage.Source.Height;
+					if (newHeight < Canvas_Sprites.Height)
+					{
+						newHeight = canvasItemsYPos + cardImage.Source.Height + 10;
+					}
+					Canvas_Sprites.Height = newHeight;
 
 					//Set the canvas left to the width of total items
 					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsXPos);
 					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsYPos);
 
-					//add the image width to total item width
-					
-					//canvasItemsHeight += (int)cardImage.Source.Width;
-					if (canvasItemsXPos == 0 && canvasItemsYPos != 0)
-					{
-						Canvas_Sprites.Height = canvasItemsYPos + (int)cardImage.Source.Height;
-					}
-					canvasItemsXPos += (int)cardImage.Source.Width;
+					//add the image width to total item width + margin
+					canvasItemsXPos += ((int)cardImage.Source.Width + 10);
 					
 					
 					//
 					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
 					{	
 						canvasItemsXPos = 0;
-						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites);
+						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites) + 10;
 					}
-
-					//output total items width to list box
-					//lbx_Bottom.Items.Add(canvasItemsWidth);
-
-					//Set drop event true
-					cardImage.AllowDrop = true;
-
-					//Testing GetNextRow
-					
 
 					//Add the image to the canvas
 					Canvas_Sprites.Children.Add(cardImage);
@@ -145,17 +132,21 @@ namespace AISpritePacker
 		public static double GetMaxY(Canvas view)
 		{
 			double maxY = 0;
+			double temp = 0;
 			foreach (Image child in view.Children)
 			{
-				if (child.Source.Height >= maxY)
+				temp = Canvas.GetTop(child);
+				if(maxY <= temp)
 				{
-					maxY = Canvas.GetTop(child);
-					maxY += child.Source.Height;
-				}			
+					maxY = Canvas.GetTop(child) + child.Source.Height;
+				}
+
+					
 			}
 			return maxY;
 		}
 
+		//Get furthest right
 		public static double GetMaxX(Canvas view)
 		{
 			double maxX = 0;
