@@ -26,6 +26,7 @@ namespace AISpritePacker
 		int canvasItemsYPos = 0;
 		int maxItemsWidth = 512;
 		double newHeight = 0;
+		double temp = 0;
 
 		public MainWindow()
 		{
@@ -64,13 +65,18 @@ namespace AISpritePacker
 					//Construct image placeholder / set source
 					Image cardImage = new Image();
 					cardImage.Source = new BitmapImage(new Uri(filename));
+					
+					//Set Width
 					Canvas_Sprites.Width = maxItemsWidth;
-					newHeight = canvasItemsYPos + cardImage.Source.Height;
-					if (newHeight < Canvas_Sprites.Height)
+		
+					//Set Height
+					if (cardImage.Source.Height >= temp)
 					{
-						newHeight = canvasItemsYPos + cardImage.Source.Height + 10;
+						newHeight = canvasItemsYPos + cardImage.Source.Height;
+						Canvas_Sprites.Height = newHeight;
 					}
-					Canvas_Sprites.Height = newHeight;
+					temp = cardImage.Source.Height;
+					
 
 					//Set the canvas left to the width of total items
 					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsXPos);
@@ -135,7 +141,7 @@ namespace AISpritePacker
 			double temp = 0;
 			foreach (Image child in view.Children)
 			{
-				temp = Canvas.GetTop(child);
+				temp = Canvas.GetTop(child) + child.Source.Height;
 				if(maxY <= temp)
 				{
 					maxY = Canvas.GetTop(child) + child.Source.Height;
