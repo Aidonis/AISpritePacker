@@ -67,15 +67,15 @@ namespace AISpritePacker
 					cardImage.Source = new BitmapImage(new Uri(filename));
 					
 					//Set Width
-					Canvas_Sprites.Width = maxItemsWidth;
+					//Canvas_Sprites.Width = maxItemsWidth;
 		
 					//Set Height
-					if (cardImage.Source.Height >= temp)
-					{
-						newHeight = canvasItemsYPos + cardImage.Source.Height;
-						Canvas_Sprites.Height = newHeight;
-					}
-					temp = cardImage.Source.Height;
+                    //if (cardImage.Source.Height >= temp)
+                    //{
+                    //    newHeight = canvasItemsYPos + cardImage.Source.Height;
+                    //    Canvas_Sprites.Height = newHeight;
+                    //}
+                    //temp = cardImage.Source.Height;
 					
 
 					//Set the canvas left to the width of total items
@@ -199,8 +199,21 @@ namespace AISpritePacker
             Canvas_Sprites.Children.Clear();
             canvasItemsXPos = 0;
             canvasItemsYPos = 0;
-            Canvas_Sprites.Height = 100;
-            Canvas_Sprites.Width = 100;
+            try
+            {
+                Canvas_Sprites.Height = Convert.ToInt32(txt_CanvasHeight.Text);
+                Canvas_Sprites.Width = Convert.ToInt32(txt_CanvasHeight.Text);
+            }
+            catch (Exception exz)
+            {
+                string messageBoxText = ("An error has occured: Canvas Height/Width invalid.");
+                string caption = "Error";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+
+                //Display box
+                MessageBox.Show(messageBoxText, caption, button, icon);
+            }
 
         }
 	}
