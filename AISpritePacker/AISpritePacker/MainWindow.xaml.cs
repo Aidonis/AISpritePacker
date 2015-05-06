@@ -197,6 +197,11 @@ namespace AISpritePacker
         private void MenuItem_Click_New(object sender, RoutedEventArgs e)
         {
             Canvas_Sprites.Children.Clear();
+            canvasItemsXPos = 0;
+            canvasItemsYPos = 0;
+            Canvas_Sprites.Height = 100;
+            Canvas_Sprites.Width = 100;
+
         }
 	}
 }
