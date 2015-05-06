@@ -100,7 +100,8 @@ namespace AISpritePacker
 			}
 		}
 
-		//Export image controls
+		//Export Canvas as PNG
+        //TODO: Update filestream with save file dialog
 		private void Button_Click_Export(object sender, RoutedEventArgs e)
 		{
 			RenderTargetBitmap rtb = GetImage(Canvas_Sprites);
@@ -189,9 +190,13 @@ namespace AISpritePacker
                 {
                     png.Save(stm);
                 }
-			
-                
             }
+        }
+
+        //New/Clear Sprite Sheet
+        private void MenuItem_Click_New(object sender, RoutedEventArgs e)
+        {
+            Canvas_Sprites.Children.Clear();
         }
 	}
 }
