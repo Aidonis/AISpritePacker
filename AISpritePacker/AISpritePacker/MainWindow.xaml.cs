@@ -166,5 +166,32 @@ namespace AISpritePacker
 
 			return maxX;
 		}
+
+        private void MenuItem_Click_Save(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "PNG Files (*.png) | *.png";
+
+            if (saveFile.ShowDialog() == true)
+            {
+                string fileName = System.IO.Path.GetFileNameWithoutExtension(saveFile.FileName);
+                string extension = System.IO.Path.GetExtension(saveFile.FileName);
+                string folder = System.IO.Path.GetDirectoryName(saveFile.FileName);
+
+                Console.WriteLine("Saving...");
+                Console.WriteLine("File: " + fileName + extension + "\nFolder: " + folder + "\\");
+
+
+                RenderTargetBitmap rtb = GetImage(Canvas_Sprites);
+                PngBitmapEncoder png = new PngBitmapEncoder();
+                png.Frames.Add(BitmapFrame.Create(rtb));
+                using (Stream stm = new FileStream(folder + "\\" + fileName + extension, FileMode.Create))
+                {
+                    png.Save(stm);
+                }
+			
+                
+            }
+        }
 	}
 }

@@ -7,7 +7,7 @@
 			<MenuItem Header="_File	">
 				<MenuItem Header="_New"/>
 				<MenuItem Header="_Open"  Click="MenuItem_Click_Open"/>
-				<MenuItem Header="_Save"/>
+				<MenuItem Header="_Save" Click="MenuItem_Click_Save"/>
 				<Separator />
 				<MenuItem Header="_Import" Click="MenuItem_Click_Import"/>
 				<MenuItem Header="_Export"/>
