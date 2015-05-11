@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -211,7 +212,51 @@ namespace AISpritePacker
                 //Display box
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
-
         }
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			XDocument srcTree = new XDocument();
+
+			//Root Node
+			XElement root = new XElement("atlas");
+			root.SetAttributeValue("width", 512);
+			root.SetAttributeValue("height", 512);
+			root.SetAttributeValue("sheet", "filePath");
+
+			//Sprite Node
+			XElement sprite = new XElement("sprite");
+			sprite.SetAttributeValue("Name", "spriteName");
+			sprite.SetAttributeValue("x0", "x0Values");
+			sprite.SetAttributeValue("x1", "x1Values");
+			sprite.SetAttributeValue("y0", "y0Values");
+			sprite.SetAttributeValue("y0", "y1Values");
+
+			root.Add(sprite);
+			root.Add(sprite);
+			srcTree.Add(root);
+
+			Console.WriteLine(srcTree);
+
+			SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "XML Files (*.xml) | *.xml";
+
+			saveFile.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+			if (saveFile.ShowDialog() == true)
+			{
+				string fileName = System.IO.Path.GetFileNameWithoutExtension(saveFile.FileName);
+				string extension = System.IO.Path.GetExtension(saveFile.FileName);
+				string folder = System.IO.Path.GetDirectoryName(saveFile.FileName);
+
+				Console.WriteLine("Saving...");
+				Console.WriteLine("File: " + fileName + extension + "\nFolder: " + folder + "\\");
+
+				using (Stream stm = new FileStream(folder + "\\" + fileName + extension, FileMode.Create))
+				{
+					srcTree.Save(stm);
+				}
+			}
+		}
 	}
 }

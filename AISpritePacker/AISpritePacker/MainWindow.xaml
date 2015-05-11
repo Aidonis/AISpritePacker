@@ -32,7 +32,9 @@
 			<Label Content="Margin:" HorizontalAlignment="Left" Margin="4,36,0,0" VerticalAlignment="Top"/>
 			<TextBox Name="textMargin" HorizontalAlignment="Left" Height="21" Margin="54,38,0,0" Text="{Binding Path=i_Margin}" TextWrapping="Wrap" VerticalAlignment="Top" Width="108"/>
             <Button Content="Clear" HorizontalAlignment="Left" Margin="90,253,0,0" VerticalAlignment="Top" Width="75" Click="MenuItem_Click_New"/>
-        </Grid>
+			<Button Content="Testing" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+
+		</Grid>
 
 
 	</Grid>
