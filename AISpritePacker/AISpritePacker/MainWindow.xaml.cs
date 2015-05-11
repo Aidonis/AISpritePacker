@@ -14,23 +14,47 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace AISpritePacker
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
 		int canvasItemsXPos = 0;
 		int canvasItemsYPos = 0;
 		int maxItemsWidth = 512;
-		double newHeight = 0;
-		double temp = 0;
+
+		private int i_margin;
+		public int i_Margin
+		{
+			get { return i_margin; }
+			set
+			{
+				i_margin = value;
+				NotifyPropertyChanged("i_Margin");
+			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void NotifyPropertyChanged(string propertyName)
+		{
+			if (PropertyChanged != null)
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			this.DataContext = this;
+			Canvas_Sprites.Width = 512;
+			Canvas_Sprites.Height = 512;
+			i_Margin = 10;
+			maxItemsWidth = Convert.ToInt32(Canvas_Sprites.Width);
 		}
 
 		private void MenuItem_Click_Open(object sender, RoutedEventArgs e)
@@ -66,31 +90,19 @@ namespace AISpritePacker
 					Image cardImage = new Image();
 					cardImage.Source = new BitmapImage(new Uri(filename));
 					
-					//Set Width
-					//Canvas_Sprites.Width = maxItemsWidth;
-		
-					//Set Height
-                    //if (cardImage.Source.Height >= temp)
-                    //{
-                    //    newHeight = canvasItemsYPos + cardImage.Source.Height;
-                    //    Canvas_Sprites.Height = newHeight;
-                    //}
-                    //temp = cardImage.Source.Height;
-					
-
 					//Set the canvas left to the width of total items
 					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsXPos);
 					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsYPos);
 
 					//add the image width to total item width + margin
-					canvasItemsXPos += ((int)cardImage.Source.Width + 10);
+					canvasItemsXPos += ((int)cardImage.Source.Width + i_Margin);
 					
 					
 					//
 					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
 					{	
 						canvasItemsXPos = 0;
-						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites) + 10;
+						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites) + i_Margin;
 					}
 
 					//Add the image to the canvas
@@ -98,21 +110,6 @@ namespace AISpritePacker
 					testBox.Items.Add(GetMaxY(Canvas_Sprites));
 				}
 			}
-		}
-
-		//Export Canvas as PNG
-        //TODO: Update filestream with save file dialog
-		private void Button_Click_Export(object sender, RoutedEventArgs e)
-		{
-			RenderTargetBitmap rtb = GetImage(Canvas_Sprites);
-			PngBitmapEncoder png = new PngBitmapEncoder();
-			png.Frames.Add(BitmapFrame.Create(rtb));
-			using (Stream stm = new FileStream("C:/Users/aidan.nabass/Documents/PackerSaves/new.png", FileMode.Create))
-			{
-				png.Save(stm);
-			}
-			
-			
 		}
 
 		//Return view as RenderTargetBitmap
@@ -168,7 +165,7 @@ namespace AISpritePacker
 			return maxX;
 		}
 
-        private void MenuItem_Click_Save(object sender, RoutedEventArgs e)
+        private void Execute_Save(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "PNG Files (*.png) | *.png";
