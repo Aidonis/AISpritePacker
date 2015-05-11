@@ -190,7 +190,7 @@ namespace AISpritePacker
 				XElement root = new XElement("atlas");
 				root.SetAttributeValue("width", Canvas_Sprites.Width);
 				root.SetAttributeValue("height", Canvas_Sprites.Height);
-				root.SetAttributeValue("sheet", "filePath");
+				root.SetAttributeValue("sheet", (folder + "\\" + fileName + extension));
 
 				//Sprite Node
 				foreach (Image child in Canvas_Sprites.Children)
@@ -243,5 +243,10 @@ namespace AISpritePacker
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
         }
+
+		private void Execute_Exit(object sender, RoutedEventArgs e)
+		{
+			Application.Current.Shutdown();
+		}
 	}
 }

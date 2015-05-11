@@ -10,13 +10,15 @@
 				<MenuItem Header="_Import" Click="MenuItem_Click_Import"/>
 				<MenuItem Header="_Export" Click="Execute_Save"/>
 				<Separator />
-				<MenuItem Header="_Exit"/>
+				<MenuItem Header="_Exit" Click="Execute_Exit"/>
 			</MenuItem>
 			<MenuItem Header="_Edit	">
 			</MenuItem>
 		</Menu>
 		<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="187,25,10,10" Height="auto" Width="auto" Background="Gray">
+			<Border BorderThickness="1.5" BorderBrush="Gray">
 			<Canvas x:Name="Canvas_Sprites" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" AllowDrop="True" Drop="Canvas_Sprites_Drop" MinWidth="0" MinHeight="0"/>
+			</Border>
 		</ScrollViewer>
 		<Grid HorizontalAlignment="Left" Margin="10,25,0,10" Width="172">
 			<Button x:Name="Button_Export" Content="Export" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="75" Click="Execute_Save"/>
