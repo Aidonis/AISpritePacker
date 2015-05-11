@@ -57,11 +57,6 @@ namespace AISpritePacker
 			i_Margin = 10;
 			maxItemsWidth = Convert.ToInt32(Canvas_Sprites.Width);
 		}
-
-		private void MenuItem_Click_Open(object sender, RoutedEventArgs e)
-		{
-
-		}
 		private void MenuItem_Click_Import(object sender, RoutedEventArgs e)
 		{
 			OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -90,7 +85,7 @@ namespace AISpritePacker
 					//Construct image placeholder / set source
 					Image cardImage = new Image();
 					cardImage.Source = new BitmapImage(new Uri(filename));
-					
+
 					//Set the canvas left to the width of total items
 					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsXPos);
 					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsYPos);
@@ -108,7 +103,6 @@ namespace AISpritePacker
 
 					//Add the image to the canvas
 					Canvas_Sprites.Children.Add(cardImage);
-					testBox.Items.Add(GetMaxY(Canvas_Sprites));
 				}
 			}
 		}
@@ -144,9 +138,7 @@ namespace AISpritePacker
 				if(maxY <= temp)
 				{
 					maxY = Canvas.GetTop(child) + child.Source.Height;
-				}
-
-					
+				}			
 			}
 			return maxY;
 		}
@@ -168,18 +160,20 @@ namespace AISpritePacker
 
         private void Execute_Save(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFile = new SaveFileDialog();
+			Canvas_Sprites.Background = new SolidColorBrush(Color.FromArgb(0,0,0,0));
+			SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "PNG Files (*.png) | *.png";
+			saveFile.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
             if (saveFile.ShowDialog() == true)
             {
-                string fileName = System.IO.Path.GetFileNameWithoutExtension(saveFile.FileName);
+                //Export PNG
+				string fileName = System.IO.Path.GetFileNameWithoutExtension(saveFile.FileName);
                 string extension = System.IO.Path.GetExtension(saveFile.FileName);
                 string folder = System.IO.Path.GetDirectoryName(saveFile.FileName);
 
                 Console.WriteLine("Saving...");
-                Console.WriteLine("File: " + fileName + extension + "\nFolder: " + folder + "\\");
-
+                Console.WriteLine("File: " + fileName + extension + "\nFolder: " + folder + "\\");	
 
                 RenderTargetBitmap rtb = GetImage(Canvas_Sprites);
                 PngBitmapEncoder png = new PngBitmapEncoder();
@@ -188,7 +182,43 @@ namespace AISpritePacker
                 {
                     png.Save(stm);
                 }
+
+				//Export XML
+				XDocument srcTree = new XDocument();
+
+				//Root Node
+				XElement root = new XElement("atlas");
+				root.SetAttributeValue("width", Canvas_Sprites.Width);
+				root.SetAttributeValue("height", Canvas_Sprites.Height);
+				root.SetAttributeValue("sheet", "filePath");
+
+				//Sprite Node
+				foreach (Image child in Canvas_Sprites.Children)
+				{
+					XElement sprite = new XElement("sprite");
+					sprite.SetAttributeValue("Name", System.IO.Path.GetFileNameWithoutExtension(child.Source.ToString()));
+					sprite.SetAttributeValue("x0", Canvas.GetLeft(child));
+					sprite.SetAttributeValue("x1", Canvas.GetLeft(child) + child.Source.Width);
+					sprite.SetAttributeValue("y0", Canvas.GetTop(child));
+					sprite.SetAttributeValue("y1", Canvas.GetTop(child) + child.Source.Height);
+					root.Add(sprite);
+				}
+				srcTree.Add(root);
+
+				Console.WriteLine(srcTree);
+
+				extension = ".xml";
+				Console.WriteLine("Saving...");
+				Console.WriteLine("File: " + fileName + extension + "\nFolder: " + folder + "\\");
+
+				using (Stream stm = new FileStream(folder + "\\" + fileName + extension, FileMode.Create))
+				{
+					srcTree.Save(stm);
+				}
+
             }
+			Canvas_Sprites.Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+
         }
 
         //New/Clear Sprite Sheet
@@ -213,50 +243,5 @@ namespace AISpritePacker
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
         }
-
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			XDocument srcTree = new XDocument();
-
-			//Root Node
-			XElement root = new XElement("atlas");
-			root.SetAttributeValue("width", 512);
-			root.SetAttributeValue("height", 512);
-			root.SetAttributeValue("sheet", "filePath");
-
-			//Sprite Node
-			XElement sprite = new XElement("sprite");
-			sprite.SetAttributeValue("Name", "spriteName");
-			sprite.SetAttributeValue("x0", "x0Values");
-			sprite.SetAttributeValue("x1", "x1Values");
-			sprite.SetAttributeValue("y0", "y0Values");
-			sprite.SetAttributeValue("y0", "y1Values");
-
-			root.Add(sprite);
-			root.Add(sprite);
-			srcTree.Add(root);
-
-			Console.WriteLine(srcTree);
-
-			SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "XML Files (*.xml) | *.xml";
-
-			saveFile.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-			if (saveFile.ShowDialog() == true)
-			{
-				string fileName = System.IO.Path.GetFileNameWithoutExtension(saveFile.FileName);
-				string extension = System.IO.Path.GetExtension(saveFile.FileName);
-				string folder = System.IO.Path.GetDirectoryName(saveFile.FileName);
-
-				Console.WriteLine("Saving...");
-				Console.WriteLine("File: " + fileName + extension + "\nFolder: " + folder + "\\");
-
-				using (Stream stm = new FileStream(folder + "\\" + fileName + extension, FileMode.Create))
-				{
-					srcTree.Save(stm);
-				}
-			}
-		}
 	}
 }

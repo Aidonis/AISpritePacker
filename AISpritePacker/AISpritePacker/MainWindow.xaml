@@ -1,16 +1,14 @@
 ﻿<Window x:Class="AISpritePacker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="630" Width="784">
 	<Grid>
 		<Menu Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.ColumnSpan="2">
 			<MenuItem Header="_File	">
 				<MenuItem Header="_New" Click="MenuItem_Click_New"/>
-				<MenuItem Header="_Open"  Click="MenuItem_Click_Open"/>
-				<MenuItem Header="_Save" Click="Execute_Save"/>
 				<Separator />
 				<MenuItem Header="_Import" Click="MenuItem_Click_Import"/>
-				<MenuItem Header="_Export"/>
+				<MenuItem Header="_Export" Click="Execute_Save"/>
 				<Separator />
 				<MenuItem Header="_Exit"/>
 			</MenuItem>
@@ -18,21 +16,21 @@
 			</MenuItem>
 		</Menu>
 		<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="187,25,10,10" Height="auto" Width="auto" Background="Gray">
-			<Canvas x:Name="Canvas_Sprites" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Red" AllowDrop="True" Drop="Canvas_Sprites_Drop" MinWidth="0" MinHeight="0"/>
+			<Canvas x:Name="Canvas_Sprites" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" AllowDrop="True" Drop="Canvas_Sprites_Drop" MinWidth="0" MinHeight="0"/>
 		</ScrollViewer>
 		<Grid HorizontalAlignment="Left" Margin="10,25,0,10" Width="172">
-			<Button x:Name="Button_Export" Content="Export" HorizontalAlignment="Left" Margin="10,253,0,0" VerticalAlignment="Top" Width="75" Click="Execute_Save"/>
+			<Button x:Name="Button_Export" Content="Export" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="75" Click="Execute_Save"/>
 			<Label Content="Canvas:" HorizontalAlignment="Left" Margin="4,7,0,0" VerticalAlignment="Top" Height="26"/>
 
 			<TextBox x:Name="txt_CanvasWidth" HorizontalAlignment="Left" Height="24" Margin="54,8,0,0" TextWrapping="Wrap" Text="{Binding ElementName=Canvas_Sprites, Path=Width, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="48"/>
 			<TextBox x:Name="txt_CanvasHeight" HorizontalAlignment="Left" Height="24" Margin="109,8,0,0" TextWrapping="Wrap" Text="{Binding ElementName=Canvas_Sprites, Path=Height, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="53"/>
-			
-			<ListBox x:Name="testBox" HorizontalAlignment="Left" Height="151" Margin="10,97,0,0" VerticalAlignment="Top" Width="152"/>
-			
+
 			<Label Content="Margin:" HorizontalAlignment="Left" Margin="4,36,0,0" VerticalAlignment="Top"/>
 			<TextBox Name="textMargin" HorizontalAlignment="Left" Height="21" Margin="54,38,0,0" Text="{Binding Path=i_Margin}" TextWrapping="Wrap" VerticalAlignment="Top" Width="108"/>
-            <Button Content="Clear" HorizontalAlignment="Left" Margin="90,253,0,0" VerticalAlignment="Top" Width="75" Click="MenuItem_Click_New"/>
-			<Button Content="Testing" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+			<Button Content="Clear" HorizontalAlignment="Left" Margin="90,71,0,0" VerticalAlignment="Top" Width="75" Click="MenuItem_Click_New"/>
+			
+			<TextBox Text="{Binding Path=Width}"  HorizontalAlignment="Left" Height="23" Margin="10,135,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
+			<TextBox Text="{Binding Path=Height}" HorizontalAlignment="Left" Height="23" Margin="10,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75"/>
 
 		</Grid>
 
