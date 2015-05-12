@@ -246,9 +246,9 @@ namespace AISpritePacker
             try
             {
                 Canvas_Sprites.Height = Convert.ToInt32(txt_CanvasHeight.Text);
-                Canvas_Sprites.Width = Convert.ToInt32(txt_CanvasHeight.Text);
+                Canvas_Sprites.Width = Convert.ToInt32(txt_CanvasWidth.Text);
             }
-            catch (Exception exz)
+            catch
             {
                 string messageBoxText = ("An error has occured: Canvas Height/Width invalid.");
                 string caption = "Error";
