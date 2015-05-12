@@ -1,7 +1,7 @@
 ﻿<Window x:Class="AISpritePacker.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="630" Width="784">
+        Title="AI Sprite Packer" Height="630" Width="784">
 	<Grid>
 		<Menu Height="20" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.ColumnSpan="2">
 			<MenuItem Header="_File	">

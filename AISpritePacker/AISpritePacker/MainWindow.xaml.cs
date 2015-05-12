@@ -94,7 +94,7 @@ namespace AISpritePacker
 					canvasItemsXPos += ((int)cardImage.Source.Width + i_Margin);
 					
 					
-					//
+					//Reset X position increment Y pos
 					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
 					{	
 						canvasItemsXPos = 0;
