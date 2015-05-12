@@ -65,11 +65,27 @@ namespace AISpritePacker
 			{
 				foreach (string filename in openFileDialog.FileNames)
 				{
+					//Construct image placeholder / set source
 					Image cardImage = new Image();
-					cardImage.Source = new BitmapImage(new Uri(System.IO.Path.GetFullPath(filename)));
-					Canvas_Sprites.Children.Add(cardImage);
-					Canvas_Sprites.Children[0].AllowDrop = true;
+					cardImage.Source = new BitmapImage(new Uri(filename));
 
+					//Set the canvas left to the width of total items
+					cardImage.SetValue(Canvas.LeftProperty, (double)canvasItemsXPos);
+					cardImage.SetValue(Canvas.TopProperty, (double)canvasItemsYPos);
+
+					//add the image width to total item width + margin
+					canvasItemsXPos += ((int)cardImage.Source.Width + i_Margin);
+
+
+					//Reset X position increment Y pos
+					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
+					{
+						canvasItemsXPos = 0;
+						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites) + i_Margin;
+					}
+
+					//Add the image to the canvas
+					Canvas_Sprites.Children.Add(cardImage);
 				}
 			}
 		}
@@ -198,9 +214,9 @@ namespace AISpritePacker
 					XElement sprite = new XElement("sprite");
 					sprite.SetAttributeValue("Name", System.IO.Path.GetFileNameWithoutExtension(child.Source.ToString()));
 					sprite.SetAttributeValue("x0", Canvas.GetLeft(child));
-					sprite.SetAttributeValue("x1", Canvas.GetLeft(child) + child.Source.Width);
 					sprite.SetAttributeValue("y0", Canvas.GetTop(child));
-					sprite.SetAttributeValue("y1", Canvas.GetTop(child) + child.Source.Height);
+					sprite.SetAttributeValue("width", child.Source.Width);
+					sprite.SetAttributeValue("height", child.Source.Height);
 					root.Add(sprite);
 				}
 				srcTree.Add(root);
