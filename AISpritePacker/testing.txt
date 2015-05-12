@@ -45,6 +45,8 @@ A non integer value will cause a warning to pop up when trying to Clear the canv
 
 A non integer value will cause the textbox to highlight in red
 
+Setting the Width/Height of the canvas to a size larger than the window will cause scroll bars to appear
+
 Drag/Drop
 =======
 Dragging images works similarly to importing
