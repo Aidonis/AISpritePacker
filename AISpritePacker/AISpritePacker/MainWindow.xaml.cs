@@ -26,7 +26,6 @@ namespace AISpritePacker
 	{
 		int canvasItemsXPos = 0;
 		int canvasItemsYPos = 0;
-		int maxItemsWidth = 512;
 
 		private int i_margin;
 		public int i_Margin
@@ -55,7 +54,6 @@ namespace AISpritePacker
 			Canvas_Sprites.Width = 512;
 			Canvas_Sprites.Height = 512;
 			i_Margin = 10;
-			maxItemsWidth = Convert.ToInt32(Canvas_Sprites.Width);
 		}
 		private void MenuItem_Click_Import(object sender, RoutedEventArgs e)
 		{
@@ -78,7 +76,7 @@ namespace AISpritePacker
 
 
 					//Reset X position increment Y pos
-					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
+					if ((canvasItemsXPos + cardImage.Source.Width) > Canvas_Sprites.Width)
 					{
 						canvasItemsXPos = 0;
 						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites) + i_Margin;
@@ -111,7 +109,7 @@ namespace AISpritePacker
 					
 					
 					//Reset X position increment Y pos
-					if ((canvasItemsXPos + cardImage.Source.Width) > maxItemsWidth)
+					if ((canvasItemsXPos + cardImage.Source.Width) > Canvas_Sprites.Width)
 					{	
 						canvasItemsXPos = 0;
 						canvasItemsYPos = (int)GetMaxY(Canvas_Sprites) + i_Margin;

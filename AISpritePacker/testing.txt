@@ -1,0 +1,61 @@
+AI Sprite Packer Cases
+============
+
+
+Select File -> New  / Clear Button
+=====
+Should clear the canvas and set it to the canvas width/height
+
+If the canvas width or height is contains invalid values a warning will pop up
+Canvas width/height text box will highlight in red if the values are invalid
+
+Select File -> Import
+====
+
+Selecting an invalid file type will crash the application (.txt, .exe, etc.)
+
+Selecting a single file should import it after the last imported image unless it is the first
+
+Selecting multiple images will import all of the selected images after the last imported image unless it's the first import
+
+Selecting multiple files types that include a non image format will crash the application
+
+Importing a large number of sprites may spill out of the canvas. You may still export from this position,
+but it will squish the sprites within the current canvas size. To avoid the compressed export, simply resize the
+canvas to fit the sprites included
+
+You may currently import images if the canvas width/height is set to (0 , 0)
+
+
+Select File -> Export  /  Export Button
+=====
+
+Will export a named .png and .xml file
+
+If you save a png with the same file name as another .png
+it will prompt if you wish to override the .png but not the xml
+The xml will be overidden along with the .png if you accept
+
+Canvas Width / Height
+=======
+
+The canvas text boxes are looking for a number to set the canvas width and height to respectively.
+
+A non integer value will cause a warning to pop up when trying to Clear the canvas or create a New one
+
+A non integer value will cause the textbox to highlight in red
+
+Drag/Drop
+=======
+Dragging images works similarly to importing
+
+Images cannot be dropped in the grey area, this is not considered the canvas
+
+If the canvas is not visible (no white space) you will not be able to drag and drop images
+
+Dragging in files that are not images will cause the program to crash
+
+Window
+======
+
+Resizing the window should not resize the canvas only the viewer it's contained in
