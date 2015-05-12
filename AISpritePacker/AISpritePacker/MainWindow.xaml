@@ -12,8 +12,6 @@
 				<Separator />
 				<MenuItem Header="_Exit" Click="Execute_Exit"/>
 			</MenuItem>
-			<MenuItem Header="_Edit	">
-			</MenuItem>
 		</Menu>
 		<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="187,25,10,10" Height="auto" Width="auto" Background="Gray">
 			<Border BorderThickness="1.5" BorderBrush="Gray">
